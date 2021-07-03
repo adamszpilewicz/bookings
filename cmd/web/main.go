@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
-	"github.com/adamszpilewicz/bookings/pkg/config"
-	"github.com/adamszpilewicz/bookings/pkg/handlers"
-	"github.com/adamszpilewicz/bookings/pkg/render"
+	config2 "github.com/adamszpilewicz/bookings/internal/config"
+	handlers2 "github.com/adamszpilewicz/bookings/internal/handlers"
+	render2 "github.com/adamszpilewicz/bookings/internal/render"
 	"github.com/alexedwards/scs/v2"
 	"log"
 	"net/http"
@@ -12,7 +12,8 @@ import (
 )
 
 const portNumber = ":8080"
-var app config.AppConfig
+
+var app config2.AppConfig
 var session *scs.SessionManager
 
 // main is the main function
@@ -27,7 +28,7 @@ func main() {
 
 	app.Session = session
 
-	tc, err := render.CreateTemplateCache()
+	tc, err := render2.CreateTemplateCache()
 	if err != nil {
 		log.Fatal("cannot create template cache")
 	}
@@ -35,10 +36,10 @@ func main() {
 	app.TemplateCache = tc
 	app.UseCache = false
 
-	repo := handlers.NewRepo(&app)
-	handlers.NewHandlers(repo)
+	repo := handlers2.NewRepo(&app)
+	handlers2.NewHandlers(repo)
 
-	render.NewTemplates(&app)
+	render2.NewTemplates(&app)
 
 	fmt.Println(fmt.Sprintf("Staring application on port %s", portNumber))
 
